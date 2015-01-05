@@ -19,6 +19,10 @@ angular
 				templateUrl: 'views/check.html',
 				controller: 'CheckCtrl'
 			})
+			.when('/:id', {
+				templateUrl: 'views/check.html',
+				controller: 'CheckCtrl'
+			})
 			.when('/lista/:paginacion', {
 				templateUrl: 'views/lista.html'
 			})

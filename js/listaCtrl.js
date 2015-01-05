@@ -8,6 +8,7 @@
 
  	$scope.listas = [];
  	$scope.spin = 1;
+ 	$scope.disablePaginacion = 1;
  	$scope.paginacion = parseInt($routeParams.paginacion);
  		//--------- Valida la Sesion --------------------
  	
@@ -24,12 +25,13 @@
 					$location.path('/');
 					return;
 				}
-			
+				// obtencion de la lista del check list
 				$http.post(location.origin + '/code-dev/analytics/getCheckListCDE/' + $scope.paginacion, $scope.loginData).
 					success(function(data, status, headers, config) {
 						console.log(data);
 						$scope.listas = data;
 						$scope.spin = 0;
+						$scope.disablePaginacion = 0;
 						// Varifica si se realizó el checkList
 						if ($scope.listas.length) {
 							if ($scope.listas[0]['ch_log'].slice(0, 10) == moment().format("YYYY-MM-DD") && $scope.listas[0]['ch_estado'] >= 1) {
@@ -39,7 +41,9 @@
 							}
 						}
 					}).
-					error(function(data, status, headers, config) {});
+					error(function(data, status, headers, config) {
+						console.log("error con lista de checklist: do something");
+					});
 
 
 
@@ -57,23 +61,6 @@
 		localStorage.removeItem("checkData");
 		$location.path('/');
 	};
-
-	// $scope.getChecklistCDE = function(){
-	// 	$http.post(location.origin + '/code-dev/analytics/logingChecklist', $scope.formulario).
-	// 		success(function(data, status, headers, config) {
-
-	// 			if (typeof(data) === "object") {
-	// 				$scope.loginData = data;
-	// 				localStorage.setItem("checkData", JSON.stringify(data));
-	// 				$scope.session = false;
-	// 				console.log($scope.loginData);
-
-	// 			}else{
-	// 				console.log(typeof(data));
-	// 			}
-	// 		}).
-	// 		error(function(data, status, headers, config) {});
-	// }
 
 	$scope.setPaginacionSiguiente = function(){
 		$scope.paginacion = $scope.paginacion + 1;

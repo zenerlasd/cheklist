@@ -4,11 +4,11 @@
  * @name lenninlasd@gmail.com 
  */
  angular.module('marcado')
- .controller('CheckCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+ .controller('CheckCtrl', ['$scope', '$http', '$location', '$routeParams' ,function ($scope, $http, $location, $routeParams) {
 
 	$http.get('json/asesor.json').success(function(data) {
 		$scope.datas = data;
-		console.log(data);
+		//console.log(data);
 	});
 
 	//--------- Valida la Sesion --------------------
@@ -21,7 +21,7 @@
 		
 		$http.get(location.origin + '/code-dev/analytics/keyValidate/' + checkSession.USU_SDSTRCLAVE).
 			success(function(data, status, headers, config) {
-				if (data == "true") {$scope.session = false;}else{$scope.session = true;}
+				if (data == "true") {$scope.session = false;} else{$scope.session = true;}
 			}).error(function(data, status, headers, config) {});
 
 	}else{
@@ -35,6 +35,8 @@
 	$scope.alert = {};
 	$scope.alert.cde = 0;
 	$scope.alert.datosMal = 0;
+	$scope.checkData = {};
+	$scope.checkDataCopia = {};
 
 	$scope.asesores = {
 		eventos: [{label: "Compensatorios"},
@@ -44,7 +46,9 @@
 				  {label:"Entrenamiento"},
 				  {label:"Capacitacion"}, 
 				  {label: "Vacio Lab"},
-				  {label: "venta externa"}, 
+				  {label: "Vacaciones"},
+				  {label: "Venta externa"},
+				  {label: "Retiros"}, 
 				  {label:"AseApoyos"}],
 		
 		modelo: [{label: "Orientador"},
@@ -54,39 +58,77 @@
 				 {label: "GB"},
 				 {label: "LZ"}],
 		
-		distribucion: [{label: "Apertura"}, 
-					   {label:"Seg Turno"}]
+		distribucion: [{label: "Apertura"},
+					   {label:"Seg Turno"},
+					   {label:"Ter Turno"}]
 	};
-	//$scope.asesores.ch_contratados = 0;
-	//$scope.asesores.ch_aseApoyos = 0;
 	
 	$scope.asesores.atencionDist = 0;
 	$scope.asesores.modeloManual = 0;
 	var eventualidades = 0;
 
-	//*****-------------------------------------
-	$scope.checkData = {};	
-	$scope.checkData.ch_contratados = 0;
+	//****************** Obtenemos el objeto de checklist, y eliminamos la id y el log 
+	//****************** y luego lo copiamos para validar si se realizaron cambios.
+	$scope.getCheckListId = function(){
+		$http.post(location.origin + '/code-dev/analytics/getCheckListCDEid/' 
+								   + $scope.loginData.ACC_PFKSTROFICINA + '/' + $scope.id).
+			success(function(data, status, headers, config) {			
+				if (_.size(data) > 0) {
+					$scope.checkData = data;
+					delete  $scope.checkData.cd_id; delete  $scope.checkData.ch_log;
+					$scope.checkDataCopia = _.clone($scope.checkData);
+					//console.log($scope.checkData);
+				}else{					
+					$location.path('/');
+				}
+			}).
+			error(function(data, status, headers, config) {
+				$location.reload();
+			});
+	};
 
-	$scope.checkData.ch_compensatorio = 0;
-	$scope.checkData.ch_incapacitados = 0;
-	$scope.checkData.ch_prestados = 0;
-	$scope.checkData.ch_ausentes = 0;
-	$scope.checkData.ch_entrenamiento = 0;
-	$scope.checkData.ch_capacitacion = 0;
-	$scope.checkData.ch_vacioLab = 0;
-	$scope.checkData.ch_ventaExterna = 0;
-	$scope.checkData.ch_aseApoyos = 0;
+	//***** DATA ******
+	$scope.id = parseInt(Number($routeParams.id));
+	
+	if ($scope.id) {
+		limpiarValores();
+		$scope.getCheckListId();
+		
+	}else{
+		$location.path('/');
+		limpiarValores();
 
-	$scope.checkData.ch_orientador = 0;
-	$scope.checkData.ch_PL = 0;
-	$scope.checkData.ch_SL = 0;
-	$scope.checkData.ch_DM = 0;
-	$scope.checkData.ch_GB = 0;
-	$scope.checkData.ch_LZ = 0;
+	}
 
-	$scope.checkData.ch_apertura = 0;
-	$scope.checkData.ch_segTurno = 0;
+	 
+	function limpiarValores(){
+		$scope.checkData.ch_contratados = 0;
+
+		$scope.checkData.ch_compensatorio = 0;
+		$scope.checkData.ch_incapacitados = 0;
+		$scope.checkData.ch_prestados = 0;
+		$scope.checkData.ch_ausentes = 0;
+		$scope.checkData.ch_entrenamiento = 0;
+		$scope.checkData.ch_capacitacion = 0;
+		$scope.checkData.ch_vacioLab = 0;
+		$scope.checkData.ch_vacaciones = 0;
+		$scope.checkData.ch_ventaExterna = 0;
+		$scope.checkData.ch_retiros = 0;
+		$scope.checkData.ch_aseApoyos = 0;
+
+		$scope.checkData.ch_orientador = 0;
+		$scope.checkData.ch_PL = 0;
+		$scope.checkData.ch_SL = 0;
+		$scope.checkData.ch_DM = 0;
+		$scope.checkData.ch_GB = 0;
+		$scope.checkData.ch_LZ = 0;
+
+		$scope.checkData.ch_apertura = 0;
+		$scope.checkData.ch_segTurno = 0;
+		$scope.checkData.ch_terTurno = 0;
+
+		$scope.checkData.ch_observaciones = "";
+	}
 
 	//***********************************************************************
 
@@ -141,8 +183,10 @@
 						+ $scope.checkData.ch_entrenamiento
 						+ $scope.checkData.ch_capacitacion
 						+ $scope.checkData.ch_vacioLab
-						+ $scope.checkData.ch_ventaExterna;
-		
+						+ $scope.checkData.ch_vacaciones
+						+ $scope.checkData.ch_ventaExterna
+						+ $scope.checkData.ch_retiros;
+
 		$scope.asesores.enCDE = $scope.checkData.ch_contratados + $scope.checkData.ch_aseApoyos - eventualidades;
 		
 		$scope.asesores.enAtencion = $scope.checkData.ch_PL + $scope.checkData.ch_SL;
@@ -170,9 +214,14 @@
 	$scope.distribucionFunction = function(){
 		$scope.eventos();
 
-		$scope.asesores.atencionDist = $scope.checkData.ch_apertura + $scope.checkData.ch_segTurno;
+		$scope.asesores.atencionDist = $scope.checkData.ch_apertura 
+									   + $scope.checkData.ch_segTurno + $scope.checkData.ch_terTurno;
 
-		if ($scope.asesores.enAtencion === $scope.asesores.atencionDist && $scope.asesores.enCDE === $scope.asesores.modeloManual && $scope.asesores.atencionDist > 0) { 			
+		if ($scope.asesores.enAtencion === $scope.asesores.atencionDist 
+			&& $scope.asesores.enCDE === $scope.asesores.modeloManual 
+			&& $scope.asesores.atencionDist > 0
+			&& !_.isEqual($scope.checkDataCopia, $scope.checkData)) { 			
+			
 			$scope.buttonClass2 = 'btn-success';
 			return false;
 		}else{

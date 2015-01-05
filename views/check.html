@@ -31,7 +31,7 @@
 		</form>
 	</div>
 <!-- 	------------------------------- Eventos ------------------------------------------- -->
-	<span class="text-left" ng-hide="session"><a href="#lista/0">Ver lista</a></span>
+	<span class="text-left" ng-hide="session"><a class="btn btn-primary" href="#lista/0"><i class="fa fa-list-ul"></i> Ver lista</a></span>
 	<!-- Button trigger modal -->
 	<button type="button" ng-hide="session" class="btn btn-link" data-toggle="modal" data-target="#myModal"><i class="fa fa-question-circle"></i> Ayuda</button>
 
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 			<div class="row label-list">
-				<div class="col-md-1 col-md-offset-1 col-xs-1 col-xs-offset-1">
+				<div class="col-md-1 col-xs-1">
 					<span class="list-group-item list-group-item-verde">Contratados</span>
 				</div>
 				<div class="col-md-1 col-xs-1" ng-repeat="detalle in asesores.eventos">
@@ -55,14 +55,10 @@
 				</div>
 			</div>
 			<div class="row">			
-				<div class="col-md-1 col-md-offset-1 col-xs-1 col-xs-offset-1" style="padding-right: 0px;padding-left: 0px;">
+				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
 					<input ng-disabled="showForm !== 1" type="number" min="0" ng-model="checkData.ch_contratados" class="form-control input-lg" style="background-color: rgba(226, 226, 226, 0.26)">
 				</div>
 				
-<!-- 				<div class="col-md-1 col-xs-1" ng-repeat="detalle in asesores.eventos | limitTo: asesores.eventos.length-1" style="padding-right: 0px;padding-left: 0px;">
-					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="detalle.cant" min="0">
-				</div> -->
-
 				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
 					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_compensatorio" min="0">
 				</div>
@@ -85,14 +81,25 @@
 					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_vacioLab" min="0">
 				</div>
 				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
+					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_vacaciones" min="0">
+				</div>
+				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
 					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_ventaExterna" min="0">
 				</div>
 				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
-					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_aseApoyos" style="background-color: rgba(255, 145, 0, 0.26)">
+					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_retiros" style="background-color: rgba(255, 0, 0, 0.15)">
+				</div>
+				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
+					<input ng-disabled="showForm !== 1" type="number" min="0" class="form-control input-lg" ng-model="checkData.ch_aseApoyos" style="background-color: rgba(0, 81, 255, 0.15)">
 				</div>
 
-				<div class="col-md-12 col-xs-12" style="margin-top: 2%">
-					<button class="btn btn-lg btn-success center-block" ng-click="eventos(2)" ng-disabled="showForm !== 1">{{asesores.enCDE}}  Siguiente</button>
+				<div class="col-md-6 col-xs-6 col-md-offset-4 col-xs-offset-4" style="margin-top: 2%">
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-lg btn-default disabled">{{asesores.enCDE}} RACs en CDE</button>
+						<button type="button" class="btn btn-lg btn-success" ng-click="eventos(2)" ng-disabled="showForm !== 1"> 
+							Siguiente
+						</button>
+					</div>					
 				</div>
 				
 					
@@ -147,9 +154,9 @@
 	<!-- 	------------------------------- Distribucion ------------------------------------------- -->
 
 		<div class="row" style="margin-top: 50px">
-			<div class="col-md-11 col-xs-11" ng-class="showForm !== 3 ? 'transparente' : sucion"></div>
+			<div class="col-md-11 col-xs-11" ng-class="showForm !== 3 ? 'trasparente2' : sucion"></div>
 			<div class="row label-list">
-				<div class="col-md-1 col-md-offset-4 col-xs-1 col-xs-offset-4">
+				<div class="col-md-1 col-md-offset-1 col-xs-1 col-xs-offset-1">
 					<span class="list-group-item list-group-item-naranja">Racs Atención</span>
 				</div>
 				<div class="col-md-1 col-xs-1" ng-repeat="rol in asesores.distribucion">
@@ -159,24 +166,31 @@
 				</div>
 			</div>
 			<div class="row">
-				<button class="btn btn-lg btn-default col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-3" ng-click="eventos(2)" ng-disabled="showForm !== 3">atrás</button>
+				<button class="btn btn-lg btn-default col-md-1 col-xs-1" ng-click="eventos(2)" ng-disabled="showForm !== 3">atrás</button>
 				
 				<div class="col-md-1 col-xs-1">
 					<div class="form-control input-lg" readonly>{{asesores.enAtencion}}</div>
 				</div>
 
 				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
-					<input ng-disabled="showForm !== 3" type="number" class="form-control input-lg" ng-model="checkData.ch_apertura">
+					<input ng-disabled="showForm !== 3" type="number" class="form-control input-lg" min="0" ng-model="checkData.ch_apertura">
 				</div>
 				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
-					<input ng-disabled="showForm !== 3" type="number" class="form-control input-lg" ng-model="checkData.ch_segTurno">
+					<input ng-disabled="showForm !== 3" type="number" class="form-control input-lg" min="0" ng-model="checkData.ch_segTurno">
+				</div>
+				<div class="col-md-1 col-xs-1" style="padding-right: 0px;padding-left: 0px;">
+					<input ng-disabled="showForm !== 3" type="number" class="form-control input-lg" min="0" ng-model="checkData.ch_terTurno">
 				</div>
 
+				<div class="col-md-5 col-xs-5">
+					<textarea placeholder="Observaciones" ng-model="checkData.ch_observaciones" class="form-control" rows="3"
+					style="resize:vertical"></textarea>
+				</div>
 				<button class="btn btn-lg" ng-class="buttonClass2" ng-click="setChecklistForm()" ng-disabled="distribucionFunction()">
 					{{asesores.atencionDist}} Enviar
 				</button>
 			</div>
-		</div>
+		</div>	
 	</form>
 
 </div>
