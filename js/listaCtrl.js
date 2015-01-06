@@ -56,6 +56,10 @@
 		//console.log($location);
 	}
 
+	$scope.JSONparse = function(obj){
+		return JSON.parse(obj);
+	};
+
 
 	$scope.logOut = function(){
 		localStorage.removeItem("checkData");

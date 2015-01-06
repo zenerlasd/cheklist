@@ -3,6 +3,9 @@
 /**
  * @name lenninlasd@gmail.com 
  */
+
+
+
  angular.module('marcado')
  .controller('CheckCtrl', ['$scope', '$http', '$location', '$routeParams' ,function ($scope, $http, $location, $routeParams) {
 
@@ -36,7 +39,12 @@
 	$scope.alert.cde = 0;
 	$scope.alert.datosMal = 0;
 	$scope.checkData = {};
+	
+	$scope.otraData = {};
+
 	$scope.checkDataCopia = {};
+	$scope.disableBotonSubmit = 0;
+	$scope.showBackdrop = 1;
 
 	$scope.asesores = {
 		eventos: [{label: "Compensatorios"},
@@ -77,7 +85,13 @@
 					$scope.checkData = data;
 					delete  $scope.checkData.cd_id; delete  $scope.checkData.ch_log;
 					$scope.checkDataCopia = _.clone($scope.checkData);
-					//console.log($scope.checkData);
+
+					$scope.otraData =  JSON.parse($scope.checkData.ch_otro);
+
+					console.log($scope.checkData);
+					// $scope.showBackdrop = $scope.showBackdrop + 2;
+					// console.log($scope.showBackdrop);
+
 				}else{					
 					$location.path('/');
 				}
@@ -93,11 +107,11 @@
 	if ($scope.id) {
 		limpiarValores();
 		$scope.getCheckListId();
-		
+
 	}else{
 		$location.path('/');
 		limpiarValores();
-
+		$scope.showBackdrop = 0;
 	}
 
 	 
@@ -147,6 +161,7 @@
 		}else{
 			$scope.alert.cde = 0;
 		}
+		$scope.disableBotonSubmit = 1;
 
 		$http.post(location.origin + '/code-dev/analytics/logingChecklist', $scope.formulario).
 			success(function(data, status, headers, config) {
@@ -237,6 +252,8 @@
 		checkData.ch_codPos = $scope.loginData.ACC_PFKSTROFICINA;
 		checkData.ch_usuario = $scope.loginData.ACC_PFKSTRUSUARIO;
 		checkData.ch_nombre  = $scope.loginData.USU_SDSTRNOMBRE;
+
+		checkData.ch_otro = JSON.stringify($scope.otraData);
 
 	    console.log(checkData);
 

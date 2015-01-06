@@ -80,11 +80,12 @@
 								<td>{{lista.ch_GB}}</td>
 								<td>{{lista.ch_LZ}}</td>
 								<td>{{lista.ch_apertura}}</td>
-								<td>{{lista.ch_segTurno}}</td>
-								<td>{{lista.ch_terTurno}}</td>
+								<td>{{lista.ch_segTurno}} ({{JSONparse(lista.ch_otro).ch_horaSegTurno}})</td>
+								<td>{{lista.ch_terTurno}} ({{JSONparse(lista.ch_otro).ch_horaTerTurno}})</td>
 							</tr>
 						</tbody>
 					</table>
+
 					<strong>Observaciones: </strong>
 					<div>
 						{{lista.ch_observaciones}}
