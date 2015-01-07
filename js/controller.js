@@ -9,10 +9,31 @@
  angular.module('marcado')
  .controller('CheckCtrl', ['$scope', '$http', '$location', '$routeParams' ,function ($scope, $http, $location, $routeParams) {
 
-	$http.get('json/asesor.json').success(function(data) {
-		$scope.datas = data;
-		//console.log(data);
-	});
+	//$http.get('json/asesor.json').success(function(data) {
+	$scope.datas = [];
+
+	function inicio(){
+
+		$scope.datas = JSON.parse(localStorage.getItem("ipList"));
+		// Si existe el registro en el localStorage, el registro se actualizará, y luego se actualiza el mysql
+		// Si no se tomara la info de la BD de MySql, se almacenará en el local
+		if ($scope.datas !== null) {
+			$http.get(location.origin + '/code-dev/analytics/getIPS').success(function(data) {
+				
+				var stringifyData = JSON.stringify(data);				
+				localStorage.setItem("ipList", stringifyData);
+				$http.post(location.origin + '/code-dev/analytics/setIPSmysql', data);
+
+			});
+		}else{
+			$http.get(location.origin + '/code-dev/analytics/getIPSmysql').success(function(data) {
+				$scope.datas = data;
+				localStorage.setItem("ipList", JSON.stringify(data));
+				console.log($scope.datas);
+			});
+		}
+	}
+	inicio();
 
 	//--------- Valida la Sesion --------------------
 	var checkSession = JSON.parse(localStorage.getItem("checkData"));
@@ -30,7 +51,7 @@
 	}else{
 		$scope.session = true;
 	}
-
+	console.log($scope.session);
 	//***********************************************************************
 	$scope.buttonClass = 'btn-default';
 	$scope.buttonClass2 = 'btn-default';
@@ -41,6 +62,7 @@
 	$scope.checkData = {};
 	
 	$scope.otraData = {};
+	$scope.otraDataCopia = {};
 
 	$scope.checkDataCopia = {};
 	$scope.disableBotonSubmit = 0;
@@ -78,6 +100,9 @@
 	//****************** Obtenemos el objeto de checklist, y eliminamos la id y el log 
 	//****************** y luego lo copiamos para validar si se realizaron cambios.
 	$scope.getCheckListId = function(){
+
+		if ($scope.session == true) {$location.path('/'); return;}
+
 		$http.post(location.origin + '/code-dev/analytics/getCheckListCDEid/' 
 								   + $scope.loginData.ACC_PFKSTROFICINA + '/' + $scope.id).
 			success(function(data, status, headers, config) {			
@@ -87,6 +112,7 @@
 					$scope.checkDataCopia = _.clone($scope.checkData);
 
 					$scope.otraData =  JSON.parse($scope.checkData.ch_otro);
+					$scope.otraDataCopia =  _.clone($scope.otraData);
 
 					console.log($scope.checkData);
 					// $scope.showBackdrop = $scope.showBackdrop + 2;
@@ -177,6 +203,7 @@
 				}else{
 					console.log(typeof(data));
 					$scope.alert.datosMal = 1;
+					$scope.disableBotonSubmit = 0;
 				}
 			}).
 			error(function(data, status, headers, config) {
@@ -235,7 +262,8 @@
 		if ($scope.asesores.enAtencion === $scope.asesores.atencionDist 
 			&& $scope.asesores.enCDE === $scope.asesores.modeloManual 
 			&& $scope.asesores.atencionDist > 0
-			&& !_.isEqual($scope.checkDataCopia, $scope.checkData)) { 			
+			&& (!_.isEqual($scope.checkDataCopia, $scope.checkData)	|| 
+				!_.isEqual($scope.otraDataCopia, $scope.otraData)) ){ 			
 			
 			$scope.buttonClass2 = 'btn-success';
 			return false;

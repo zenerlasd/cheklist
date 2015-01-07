@@ -7,5 +7,6 @@
 	{"nombre": "090 TIGO DE LA CUESTA", "ip": "10.77.20.250"},
 	{"nombre": "093 TIGO CENTRO BOGOTA", "ip": "10.81.16.250"},
 	{"nombre": "006 TIGO CRA 54", "ip": "10.75.16.253"},
-	{"nombre": "006 TIGO BUENAVISTA", "ip": "10.75.30.242"}
+	{"nombre": "006 TIGO BUENAVISTA", "ip": "10.75.30.242"},
+	{"nombre": "053 TIGO CENTRO BUCARAMANGA", "ip": "10.77.2.250"}
 ]
