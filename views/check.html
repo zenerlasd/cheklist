@@ -8,7 +8,7 @@
 
 				<div class="col-md-4 col-md-offset-4">
 					<div class="row">
-						<ls-datalist class="col-md-12" placeholder="CDE" lsmodel="formulario" value="ip" option="cde">
+						<ls-datalist class="col-md-12" placeholder="Escriba aqui su CDE" lsmodel="formulario" value="ip" option="cde">
 						</ls-datalist>
 					</div>
 				</div>
@@ -30,7 +30,13 @@
 				
 			</div>
 			<div class="alert alert-danger col-md-4 col-md-offset-4" ng-show="alert.cde" role="alert">Selecciona un CDE</div>
-			<div class="alert alert-danger col-md-4 col-md-offset-4" ng-show="alert.datosMal" role="alert">Datos Incorrectos ingresados</div>
+			<div class="alert alert-danger col-md-4 col-md-offset-4" ng-show="alert.datosMal" role="alert">
+				<strong>Datos Incorrectos ingresados.</strong>
+				<div>El usuario debe que tener permisos de administrador o coordinador en Digiturno (Usuario Autorizado)</div>
+				<div>Si no es Usuario autorizado enviar correo de solicitud a 
+					<strong>soporte.digiturno@tigo.com.co</strong>
+				</div>
+			</div>
 		</form>
 	</div>
 <!-- 	------------------------------- Eventos ------------------------------------------- -->
