@@ -18,17 +18,19 @@
 
 		$scope.loginData = checkSession;		
 		
-		$http.get(location.origin + '/code-dev/analytics/keyValidate/' + checkSession.USU_SDSTRCLAVE).
-			success(function(data, status, headers, config) {
+		//$http.get(location.origin + '/code-dev/analytics/keyValidate/' + checkSession.USU_SDSTRCLAVE).
+			//success(function(data, status, headers, config) {
 				//console.log(data);
-				if (data != "true") {
-					$location.path('/');
-					return;
-				}
+				//if (data != "true") {
+				//	$location.path('/');
+				//	return;
+				//}
+				
 				// obtencion de la lista del check list
+				console.log($scope.paginacion);
 				$http.post(location.origin + '/code-dev/analytics/getCheckListCDE/' + $scope.paginacion, $scope.loginData).
 					success(function(data, status, headers, config) {
-						console.log(data);
+						//console.log(data);
 						$scope.listas = data;
 						$scope.spin = 0;
 						$scope.disablePaginacion = 0;
@@ -47,10 +49,10 @@
 
 
 
-			}).
-			error(function(data, status, headers, config) {
-
-			});
+			//}).
+			//error(function(data, status, headers, config) {
+			//	
+			//});
 	}else{
 		$location.path('/');
 		//console.log($location);

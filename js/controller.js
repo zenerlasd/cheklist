@@ -7,17 +7,22 @@
 
 
  angular.module('marcado')
- .controller('CheckCtrl', ['$scope', '$http', '$location', '$routeParams' ,function ($scope, $http, $location, $routeParams) {
+ .controller('CheckCtrl', ['$scope', '$http', '$location', '$routeParams', function ($scope, $http, $location, $routeParams) {
 
-	//$http.get('json/asesor.json').success(function(data) {
 	$scope.datas = [];
 
 	function inicio(){
 
 		$scope.datas = JSON.parse(localStorage.getItem("ipList"));
+		var inicio = localStorage.getItem("inicio");
 		// Si existe el registro en el localStorage, el registro se actualizará, y luego se actualiza el mysql
 		// Si no se tomara la info de la BD de MySql, se almacenará en el local
+		if (inicio === 1) {return}
+		
 		if ($scope.datas !== null) {
+
+			localStorage.setItem("inicio", 1);
+
 			$http.get(location.origin + '/code-dev/analytics/getIPS').success(function(data) {
 				
 				var stringifyData = JSON.stringify(data);				
@@ -29,7 +34,7 @@
 			$http.get(location.origin + '/code-dev/analytics/getIPSmysql').success(function(data) {
 				$scope.datas = data;
 				localStorage.setItem("ipList", JSON.stringify(data));
-				console.log($scope.datas);
+				//console.log($scope.datas);
 			});
 		}
 	}
@@ -41,12 +46,14 @@
 
 	if (checkSession !== null) {
 
-		$scope.loginData = checkSession;				
+		$scope.loginData = checkSession;
+
+		$scope.session = false;			
 		
-		$http.get(location.origin + '/code-dev/analytics/keyValidate/' + checkSession.USU_SDSTRCLAVE).
-			success(function(data, status, headers, config) {
-				if (data == "true") {$scope.session = false;} else{$scope.session = true;}
-			}).error(function(data, status, headers, config) {});
+		//$http.get(location.origin + '/code-dev/analytics/keyValidate/' + checkSession.USU_SDSTRCLAVE).
+		//	success(function(data, status, headers, config) {
+		//		if (data == "true") {$scope.session = false;} else{$scope.session = true;}
+		//	}).error(function(data, status, headers, config) {});
 
 	}else{
 		$scope.session = true;
@@ -103,11 +110,13 @@
 
 		if ($scope.session == true) {$location.path('/'); return;}
 
-		$http.post(location.origin + '/code-dev/analytics/getCheckListCDEid/' 
+		$http.get('http://10.66.6.241:3000/check/getCheckListCDEid/' 
 								   + $scope.loginData.ACC_PFKSTROFICINA + '/' + $scope.id).
-			success(function(data, status, headers, config) {			
+			success(function(data, status, headers, config) {
+				console.log(data);
+
 				if (_.size(data) > 0) {
-					$scope.checkData = data;
+					$scope.checkData = data[0];
 					delete  $scope.checkData.cd_id; delete  $scope.checkData.ch_log;
 					$scope.checkDataCopia = _.clone($scope.checkData);
 
@@ -174,6 +183,7 @@
 
 	$scope.logOut = function(){
 		localStorage.removeItem("checkData");
+		localStorage.removeItem("inicio");
 		window.location.reload();
 	};
 
