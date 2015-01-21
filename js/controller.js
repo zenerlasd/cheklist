@@ -74,6 +74,7 @@
 
 	$scope.checkDataCopia = {};
 	$scope.disableBotonSubmit = 0;
+	$scope.disableBotonSubmit2 = 0;
 	$scope.showBackdrop = 1;
 
 	$scope.asesores = {
@@ -293,16 +294,20 @@
 		checkData.ch_nombre  = $scope.loginData.USU_SDSTRNOMBRE;
 
 		checkData.ch_otro = JSON.stringify($scope.otraData);
+		$scope.disableBotonSubmit2 = 1;
 
 	    console.log(checkData);
 
 	   	$http.post(location.origin + '/code-dev/analytics/insertChecklist', checkData).
 			success(function(data, status, headers, config) {
 				$scope.enviado = 1;
+				$scope.disableBotonSubmit2 = 0;
 				localStorage.setItem("enviado", 1);
 				$location.path('/lista/0');
 			}).
 			error(function(data, status, headers, config) {
+				alert("Ocurrió un error, por favor intenta de nuevo");
+				$scope.disableBotonSubmit2 = 0;
 			});
 
 	};

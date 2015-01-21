@@ -217,10 +217,16 @@
 					<textarea placeholder="Observaciones" ng-model="checkData.ch_observaciones" class="form-control" rows="3"
 					style="resize:vertical"></textarea>
 				</div>
-				<button class="btn btn-lg col-md-1 col-xs-1" ng-class="buttonClass2" ng-click="setChecklistForm()" ng-disabled="distribucionFunction()">
-					{{asesores.atencionDist}} Enviar
+				<button class="btn btn-lg col-md-1 col-xs-1" ng-class="buttonClass2" ng-click="setChecklistForm()" ng-disabled="distribucionFunction() || disableBotonSubmit2">
+					<span ng-hide="disableBotonSubmit2">{{asesores.atencionDist}} Enviar </span>				
+					<i ng-show="disableBotonSubmit2" class="fa fa-spinner fa-spin"></i>
 				</button>
 			</div>
+			
+			<div class="alert alert-info col-md-6 col-md-offset-1" style="margin-top: 5px" role="alert">
+				<strong>Aviso!</strong> Sólo se tiene en cuenta la apertura y segundos turnos de los asesores en atención,  es decir L1 y L2.
+			</div>
+
 		</div>	
 	</form>
 	
