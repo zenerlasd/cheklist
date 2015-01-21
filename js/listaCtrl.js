@@ -45,6 +45,7 @@
 					}).
 					error(function(data, status, headers, config) {
 						console.log("error con lista de checklist: do something");
+						location.reload();
 					});
 
 
@@ -65,7 +66,8 @@
 
 	$scope.logOut = function(){
 		localStorage.removeItem("checkData");
-		$location.path('/');
+		localStorage.removeItem("inicio");
+		window.location.reload();
 	};
 
 	$scope.setPaginacionSiguiente = function(){

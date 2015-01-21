@@ -17,7 +17,8 @@
 		var inicio = localStorage.getItem("inicio");
 		// Si existe el registro en el localStorage, el registro se actualizará, y luego se actualiza el mysql
 		// Si no se tomara la info de la BD de MySql, se almacenará en el local
-		if (inicio === 1) {return}
+
+		if (inicio == 1) {return}
 		
 		if ($scope.datas !== null) {
 
@@ -217,8 +218,8 @@
 				}
 			}).
 			error(function(data, status, headers, config) {
-			// called asynchronously if an error occurs
-			// or server returns response with an error status.
+				alert("Ocurrió un problema, por favor intenta de nuevo.");
+				$scope.disableBotonSubmit = 0;
 			});
 	};
 
