@@ -8,6 +8,7 @@
 
  	$scope.listas = [];
  	$scope.spin = 1;
+ 	$scope.sinRegistros = 0;
  	$scope.disablePaginacion = 1;
  	$scope.paginacion = parseInt($routeParams.paginacion);
  		//--------- Valida la Sesion --------------------
@@ -27,10 +28,10 @@
 				//}
 				
 				// obtencion de la lista del check list
-				console.log($scope.paginacion);
+				//console.log($scope.paginacion);
 				$http.post(location.origin + '/code-dev/analytics/getCheckListCDE/' + $scope.paginacion, $scope.loginData).
 					success(function(data, status, headers, config) {
-						//console.log(data);
+						console.log(_.size(data));
 						$scope.listas = data;
 						$scope.spin = 0;
 						$scope.disablePaginacion = 0;
@@ -41,6 +42,9 @@
 							}else{
 								localStorage.setItem("enviado", 0);
 							}
+						}else if ($scope.paginacion == 0) {
+							$scope.disablePaginacion = 1;
+							$scope.sinRegistros = 1;
 						}
 					}).
 					error(function(data, status, headers, config) {

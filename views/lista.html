@@ -11,6 +11,10 @@
 			</div>
 		</div>
 		<div ng-show="spin" class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i></div>
+
+		<div ng-show="sinRegistros" class="alert alert-info" role="alert" style="margin-top: 15px"> 
+			No hay registros aún, realiza tu primer checkList de dimencionamiento diario.
+		</div>
 		
 		<div ng-repeat="(key, lista) in listas" class="panel panel-primary" style="margin-top: 15px">
 			<div class="panel-body">
